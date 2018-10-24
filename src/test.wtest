@@ -19,15 +19,15 @@ describe "inscripciones"{
 	)
 	
 	const intro = new Materia(
-		carrera=informatica,creditos=8,anio=1,inscriptos=#{}, cupo = 20
+		carrera=informatica,creditos=8,anio=1, cupo = 20
 	)
 	
 	const objetos1 = new MateriaConCorrelativas(
-		carrera=informatica,creditos=10,anio=2,inscriptos = #{},correlativas = #{intro},cupo = 20
+		carrera=informatica,creditos=10,anio=2,correlativas = #{intro},cupo = 20
 	)
 	
 	const objetos1Bis = new MateriaConCorrelativas(
-		carrera=informatica,creditos=10,anio=2,inscriptos = #{},correlativas = #{intro},cupo = 1
+		carrera=informatica,creditos=10,anio=2,correlativas = #{intro},cupo = 1
 	)
 	
 	
@@ -48,7 +48,7 @@ describe "inscripciones"{
 		assert.that(fabi.materiasAprobadas().size()==1)
 	}
 	test "inscriptos" { 
-		assert.equals(objetos1Bis.inscriptos(),#{fabi})
+		assert.equals(objetos1Bis.alumnos(),#{fabi})
 	}
 	
 	test "aprobo el anio anterior"{
@@ -57,13 +57,13 @@ describe "inscripciones"{
 	
 	test "dar de baja un pibe y que se anote el que esta en espera"{
 		objetos1Bis.darDeBaja(fabi)
-		assert.equals(objetos1Bis.inscriptos(),#{fede})
+		assert.equals(objetos1Bis.alumnos(),#{fede})
 	}
 	
 	test "estudiantes inscriptos en objetos1"{
 		fabi.inscribirse(objetos1)
 		fede.inscribirse(objetos1)
-		assert.equals(objetos1.inscriptos(),#{fabi,fede})
+		assert.equals(objetos1.alumnos(),#{fabi,fede})
 	}
 	
 	test "estudiantes en lista de espera de objetos 1"{
