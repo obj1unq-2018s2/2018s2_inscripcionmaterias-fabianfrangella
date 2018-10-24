@@ -2,8 +2,9 @@ import materia.*
 import universidad.*
 class Estudiante {
 
-	var materiasAprobadas // conjunto
+	var property materiasAprobadas // conjunto
 	var property materiasInscriptas // conjunto
+	var property materiasEnEspera = #{}
 	var property carreras 
 
 	method puedeCursar(materia) = 
@@ -17,7 +18,7 @@ class Estudiante {
 			materia.inscribir(self)
 		} else if (self.puedeCursar(materia) && !materia.tieneCupo()) {
 			materia.ponerEnEspera(self)
-			
+			materiasEnEspera.add(materia)
 		} else {
 			self.error ("No podes anotarte en esta materia")
 		}
@@ -36,10 +37,11 @@ class Estudiante {
 	method creditos() = materiasAprobadas.sum{ mat => mat.Materia().creditos() }
 	
 	method aproboElAnioAnterior(materia) {
-		var anioMat = materia.anio()
-		var matAprAux = materiasAprobadas.map{mat=>mat.Materia()}.filter{mat=>mat.anio()==anioMat.anio()}
-		var matsCarreraAux = materia.carrera().filter{mat=>mat.anio() == anioMat.anio()}
-		return matAprAux == matsCarreraAux
+		
+		var materiasAnio = materia.carrera().materias().filter{mat=>mat.anio() == materia.anio()-1}
+		var aprobadasAux = materiasAprobadas.map{mat=>mat.materia()}.filter{mat=>mat.anio() == materia.anio()}
+		
+		return materiasAnio.size() == aprobadasAux.size()
 	}
 	
 	method cursaLaCarrera(carrera) = carreras.contains(carrera)
@@ -47,6 +49,10 @@ class Estudiante {
 	method registrarAprobada(materia, nota) {
 		var aprLocl = new MateriaAprobada(alumno = self, nota = nota, materia = materia)
 		if (!materiasAprobadas.any{ mat => mat.materia() == aprLocl.materia()}) materiasAprobadas.add(aprLocl)
+	}
+	
+	method materiasQuePuedeCursar(carrera){
+		return carrera.materias().filter{materia=>self.puedeCursar(materia)}
 	}
 	
 }

@@ -2,42 +2,97 @@ import materia.*
 import estudiante.*
 import universidad.*
 describe "inscripciones"{
-	
+		
+	const informatica = new Carrera ()
 	var fabi = new Estudiante (
-		carreras=#{"informatica"},materiasAprobadas = #{},materiasInscriptas=#{}
+		carreras=#{informatica},materiasAprobadas = #{},materiasInscriptas=#{}
 	)
 	var fede = new Estudiante (
-		carreras=#{"informatica"},materiasAprobadas = #{},materiasInscriptas=#{}
+		carreras=#{informatica},materiasAprobadas = #{},materiasInscriptas=#{}
+	)
+	var andy = new Estudiante (
+		carreras=#{informatica},materiasAprobadas = #{},materiasInscriptas=#{}
+	)	
+	var dami = new Estudiante (
+		carreras=#{informatica},materiasAprobadas = #{},materiasInscriptas=#{}
 	)
 	
 	const intro = new Materia(
-		carrera="informatica",creditos=8,anio=1,inscriptos=#{}, cupo = 20
+		carrera=informatica,creditos=8,anio=1,inscriptos=#{}, cupo = 20
 	)
 	
 	const objetos1 = new MateriaConCorrelativas(
-		carrera="informatica",creditos=10,anio=2,inscriptos = #{},correlativas = #{intro},cupo = 1
+		carrera=informatica,creditos=10,anio=2,inscriptos = #{},correlativas = #{intro},cupo = 20
 	)
 	
 	const objetos1Bis = new MateriaConCorrelativas(
-		carrera="informatica",creditos=10,anio=2,inscriptos = #{},correlativas = #{intro},cupo = 1
+		carrera=informatica,creditos=10,anio=2,inscriptos = #{},correlativas = #{intro},cupo = 1
 	)
-		
-	test "inscribir al pibe a objetos1, darlo de baja y que quede el de la lista de espera"{
-		fabi.registrarAprobada(intro,7)
-		fabi.inscribirse(objetos1)
-		assert.equals(objetos1.inscriptos(),#{fabi})
-		fede.registrarAprobada(intro,5)
-		fede.inscribirse(objetos1)	
-		objetos1.darDeBaja(fabi)
-		assert.equals(objetos1.inscriptos(),#{fede})
-			
-	}
 	
-	test "inscriptos" { 
-		fabi.registrarAprobada(intro,10)
-		fede.registrarAprobada(intro,5)
+	
+	
+	fixture{
+		informatica.asignarMateria(intro)
+		informatica.asignarMateria(objetos1)
+		informatica.asignarMateria(objetos1Bis)
+		fabi.registrarAprobada(intro,8)
+		fede.registrarAprobada(intro,10)
+		andy.registrarAprobada(intro,9)
 		fabi.inscribirse(objetos1Bis)
 		fede.inscribirse(objetos1Bis)
-		assert.equals(objetos1Bis.inscriptos(),#{fede,fabi})
 	}
+
+	test "las notas no se cargan dos veces"{
+		fabi.registrarAprobada(intro,7)
+		assert.that(fabi.materiasAprobadas().size()==1)
+	}
+	test "inscriptos" { 
+		assert.equals(objetos1Bis.inscriptos(),#{fabi})
+	}
+	
+	test "aprobo el anio anterior"{
+		assert.that(fabi.aproboElAnioAnterior(objetos1))
+	}
+	
+	test "dar de baja un pibe y que se anote el que esta en espera"{
+		objetos1Bis.darDeBaja(fabi)
+		assert.equals(objetos1Bis.inscriptos(),#{fede})
+	}
+	
+	test "estudiantes inscriptos en objetos1"{
+		fabi.inscribirse(objetos1)
+		fede.inscribirse(objetos1)
+		assert.equals(objetos1.inscriptos(),#{fabi,fede})
+	}
+	
+	test "estudiantes en lista de espera de objetos 1"{
+		assert.equals(objetos1Bis.estudiantesEnListaDeEspera(),[fede])
+	}
+	
+	test "materias que puede cursar de informatica"{
+		assert.equals(fabi.materiasQuePuedeCursar(informatica),#{objetos1,objetos1Bis})
+	}
+	
+	test "materias a las que esta inscripto fabi"{
+		assert.equals(fabi.materiasInscriptas(),#{objetos1Bis})
+	}
+	
+	test "materias en las que fede esta en espera"{
+		assert.equals(fede.materiasEnEspera(),#{objetos1Bis})
+	}
+	
+	test "fede quiere cursar una aprobada"{
+		assert.throwsExceptionWithMessage("No podes anotarte en esta materia",{fede.inscribirse(intro)})
+	}
+	
+	test "dami quiere anotarse en objetos y no tiene la correlativa"{
+		assert.throwsExceptionWithMessage("No podes anotarte en esta materia",{dami.inscribirse(objetos1)})
+	}
+	
+	test "andy queda en lista de espera para objetos" {
+		andy.inscribirse(objetos1Bis)
+		assert.equals(andy.materiasEnEspera(),#{objetos1Bis})
+		assert.equals(objetos1Bis.estudiantesEnListaDeEspera(),[fede,andy])
+	}
+	
 }

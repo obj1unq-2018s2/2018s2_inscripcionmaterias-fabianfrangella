@@ -39,8 +39,11 @@ class Materia {
 	
 	method darDeBaja(estudiante){
 		inscriptos.remove(estudiante)
-		self.inscribir(curso.listaDeEspera())
+		curso.darDeBaja(estudiante)
+		curso.anotarAlPrimero()
 	}
+
+	method estudiantesEnListaDeEspera() = curso.listaDeEspera()
 }
 
 class MateriaConCorrelativas inherits Materia {
