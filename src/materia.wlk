@@ -8,8 +8,9 @@ class Materia {
 	const creditos // numero
 	const anio // numero
 	const cupo
-	var curso = new Curso(materia=self)
-	var property inscriptos // conjunto
+	var property alumnos = #{}
+	var listaDeEspera = []
+
 
 	constructor(_carrera, _creditos, _anio,_cupo) {
 		carrera = _carrera
@@ -26,24 +27,30 @@ class Materia {
 	
 	method anio() = anio
 	
-	method inscribir(alumno){
-		inscriptos.add(alumno)
-		curso.inscribirAlumno(alumno)
+	method inscribir(alumno) {
+		alumnos.add(alumno)
 	}
+
 	
-	method tieneCupo() = cupo > curso.alumnos().size()
+	method tieneCupo() = cupo > alumnos.size()
 	
-	method ponerEnEspera(alumno){
-		curso.ponerEnEspera(alumno)
+	method ponerEnEspera(alumno) {
+		listaDeEspera.add(alumno)
 	}
 	
 	method darDeBaja(estudiante){
-		inscriptos.remove(estudiante)
-		curso.darDeBaja(estudiante)
-		curso.anotarAlPrimero()
+		alumnos.remove(estudiante)
+		self.anotarAlPrimero()
 	}
-
-	method estudiantesEnListaDeEspera() = curso.listaDeEspera()
+	
+	method anotarAlPrimero() {
+		self.inscribir(self.primeroDeLaLista())
+		self.inscribir(self.primeroDeLaLista())
+		listaDeEspera = listaDeEspera.drop(1)
+	}
+	method primeroDeLaLista() = listaDeEspera.first()
+	
+	method estudiantesEnListaDeEspera() = listaDeEspera
 }
 
 class MateriaConCorrelativas inherits Materia {
