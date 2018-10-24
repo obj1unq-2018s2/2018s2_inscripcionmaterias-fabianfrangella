@@ -28,7 +28,15 @@ class Materia {
 	method anio() = anio
 	
 	method inscribir(alumno) {
-		alumnos.add(alumno)
+		if (alumno.puedeCursar(self) && self.tieneCupo()) {
+			alumno.inscribirse(self)
+			alumnos.add(alumno)
+		} else if (alumno.puedeCursar(self) && !self.tieneCupo()) {
+			self.ponerEnEspera(alumno)
+			alumno.agregarEnEspera(self)
+		} else {
+			self.error ("No podes anotarte en esta materia")
+		}
 	}
 
 	
@@ -44,7 +52,6 @@ class Materia {
 	}
 	
 	method anotarAlPrimero() {
-		self.inscribir(self.primeroDeLaLista())
 		self.inscribir(self.primeroDeLaLista())
 		listaDeEspera = listaDeEspera.drop(1)
 	}
@@ -79,6 +86,17 @@ class MateriaDeAnio inherits Materia {
 
 }
 
+class MateriaPorOrdenDeLlegada inherits Materia{
+	override method ponerEnEspera(alumno){}
+}
+
+class MateriaElitista inherits Materia {
+	
+}
+
+class MateriaPorGradoDeAvance inherits Materia{
+	
+}
 class MateriaAprobada {
 
 	const alumno

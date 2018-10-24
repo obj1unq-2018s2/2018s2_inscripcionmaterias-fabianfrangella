@@ -13,15 +13,11 @@ class Estudiante {
 	
 
 	method inscribirse(materia) {
-		if (self.puedeCursar(materia) && materia.tieneCupo()) {
-			materiasInscriptas.add(materia)
-			materia.inscribir(self)
-		} else if (self.puedeCursar(materia) && !materia.tieneCupo()) {
-			materia.ponerEnEspera(self)
-			materiasEnEspera.add(materia)
-		} else {
-			self.error ("No podes anotarte en esta materia")
-		}
+		materiasInscriptas.add(materia)
+	}
+
+	method agregarEnEspera(materia) {
+		materiasEnEspera.add(materia)
 	}
 	
 	method cumplePrerrequisitos(materia) = materia.prerrequisitos(self)

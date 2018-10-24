@@ -39,8 +39,8 @@ describe "inscripciones"{
 		fabi.registrarAprobada(intro,8)
 		fede.registrarAprobada(intro,10)
 		andy.registrarAprobada(intro,9)
-		fabi.inscribirse(objetos1Bis)
-		fede.inscribirse(objetos1Bis)
+		objetos1Bis.inscribir(fabi)
+		objetos1Bis.inscribir(fede)
 	}
 
 	test "las notas no se cargan dos veces"{
@@ -61,8 +61,8 @@ describe "inscripciones"{
 	}
 	
 	test "estudiantes inscriptos en objetos1"{
-		fabi.inscribirse(objetos1)
-		fede.inscribirse(objetos1)
+		objetos1.inscribir(fabi)
+		objetos1.inscribir(fede)
 		assert.equals(objetos1.alumnos(),#{fabi,fede})
 	}
 	
@@ -83,17 +83,18 @@ describe "inscripciones"{
 	}
 	
 	test "fede quiere cursar una aprobada"{
-		assert.throwsExceptionWithMessage("No podes anotarte en esta materia",{fede.inscribirse(intro)})
+		assert.throwsExceptionWithMessage("No podes anotarte en esta materia",{intro.inscribir(fede)})
 	}
 	
 	test "dami quiere anotarse en objetos y no tiene la correlativa"{
-		assert.throwsExceptionWithMessage("No podes anotarte en esta materia",{dami.inscribirse(objetos1)})
+		assert.throwsExceptionWithMessage("No podes anotarte en esta materia",{objetos1.inscribir(dami)})
 	}
 	
 	test "andy queda en lista de espera para objetos" {
-		andy.inscribirse(objetos1Bis)
+		objetos1Bis.inscribir(andy)
 		assert.equals(andy.materiasEnEspera(),#{objetos1Bis})
 		assert.equals(objetos1Bis.estudiantesEnListaDeEspera(),[fede,andy])
 	}
+	
 	
 }
