@@ -4,6 +4,7 @@ import universidad.*
 describe "inscripciones"{
 		
 	const informatica = new Carrera ()
+	
 	var fabi = new Estudiante (
 		carreras=#{informatica},materiasAprobadas = #{},materiasInscriptas=#{}
 	)

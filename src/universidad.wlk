@@ -1,39 +1,46 @@
 class Curso {
+
 	const materia
 	var alumnos = #{}
 	var property listaDeEspera = []
-	
-	constructor(_materia){
+
+	constructor(_materia) {
 		materia = _materia
 	}
-	method inscribirAlumno(alumno){
+
+	method inscribirAlumno(alumno) {
 		alumnos.add(alumno)
 	}
-	
+
 	method alumnos() = alumnos
-	
-	method ponerEnEspera(alumno){
+
+	method ponerEnEspera(alumno) {
 		listaDeEspera.add(alumno)
 	}
-	
-	method darDeBaja(estudiante){
+
+	method darDeBaja(estudiante) {
 		alumnos.remove(estudiante)
 	}
-	
-	method anotarAlPrimero(){
+
+	method anotarAlPrimero() {
 		self.inscribirAlumno(self.primeroDeLaLista())
 		materia.inscribir(self.primeroDeLaLista())
 		listaDeEspera = listaDeEspera.drop(1)
 	}
-	
+
 	method primeroDeLaLista() = listaDeEspera.get(0)
+
 }
 
 class Carrera {
-	
+
 	var property materias = #{}
-	
-	method asignarMateria(materia){
+
+	method asignarMateria(materia) {
 		materias.add(materia)
 	}
+
+	method materiasDeAnio(anio) = materias.filter{ mat => mat.anio() == anio }
+
 }
+

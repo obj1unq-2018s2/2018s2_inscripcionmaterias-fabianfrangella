@@ -38,10 +38,10 @@ class Estudiante {
 	
 	method aproboElAnioAnterior(materia) {
 		
-		var materiasAnio = materia.carrera().materias().filter{mat=>mat.anio() == materia.anio()-1}
-		var aprobadasAux = materiasAprobadas.map{mat=>mat.materia()}.filter{mat=>mat.anio() == materia.anio()}
-		
-		return materiasAnio.size() == aprobadasAux.size()
+		var anioAux = materia.anio() - 1
+		var carreraAux = materia.carrera()
+		var aprobadasAnio = materiasAprobadas.filter{mat=>mat.anioMateria()==anioAux}
+		return carreraAux.materiasDeAnio(anioAux) == aprobadasAnio.map{mat=>mat.materia()}.asSet()
 	}
 	
 	method cursaLaCarrera(carrera) = carreras.contains(carrera)

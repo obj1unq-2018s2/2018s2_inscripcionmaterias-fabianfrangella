@@ -85,6 +85,6 @@ class MateriaAprobada {
 	}
 
 	method materia() = materia
-
+	method anioMateria() = materia.anio()
 }
 
