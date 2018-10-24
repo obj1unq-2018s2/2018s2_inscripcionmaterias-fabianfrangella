@@ -51,5 +51,8 @@ class Estudiante {
 		return carrera.materias().filter{materia=>self.puedeCursar(materia)}
 	}
 	
+	method cantidadDeAprobadas() = materiasAprobadas.size()
+	
+	method promedio() = materiasAprobadas.sum{ mat => mat.nota() }
 }
 

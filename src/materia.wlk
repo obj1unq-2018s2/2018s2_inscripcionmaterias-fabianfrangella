@@ -48,10 +48,10 @@ class Materia {
 	
 	method darDeBaja(estudiante){
 		alumnos.remove(estudiante)
-		self.anotarAlPrimero()
+		self.anotarAlQueCorresponda()
 	}
 	
-	method anotarAlPrimero() {
+	method anotarAlQueCorresponda() { // las materias normales anotan por orden de llegada
 		self.inscribir(self.primeroDeLaLista())
 		listaDeEspera = listaDeEspera.drop(1)
 	}
@@ -86,16 +86,25 @@ class MateriaDeAnio inherits Materia {
 
 }
 
-class MateriaPorOrdenDeLlegada inherits Materia{
-	override method ponerEnEspera(alumno){}
-}
-
 class MateriaElitista inherits Materia {
-	
+
+	override method anotarAlQueCorresponda() {
+		var mejorPromedio = listaDeEspera.max{alumno=>alumno.promedio()}
+		self.inscribir(mejorPromedio)
+		listaDeEspera.remove(mejorPromedio)
+	}
+
 }
 
-class MateriaPorGradoDeAvance inherits Materia{
-	
+class MateriaPorGradoDeAvance inherits Materia {
+
+	override method anotarAlQueCorresponda() {
+		var masAvanzado = listaDeEspera.max{alumno=>alumno.cantidadDeAprobadas()}
+		self.inscribir(masAvanzado)
+		listaDeEspera.remove(masAvanzado)
+		
+	}
+
 }
 class MateriaAprobada {
 
@@ -111,5 +120,6 @@ class MateriaAprobada {
 
 	method materia() = materia
 	method anioMateria() = materia.anio()
+	method nota() = nota
 }
 

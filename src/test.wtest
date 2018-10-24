@@ -18,9 +18,7 @@ describe "inscripciones"{
 		carreras=#{informatica},materiasAprobadas = #{},materiasInscriptas=#{}
 	)
 	
-	const intro = new Materia(
-		carrera=informatica,creditos=8,anio=1, cupo = 20
-	)
+	const intro = new Materia(carrera=informatica,creditos=8,anio=1, cupo = 20)
 	
 	const objetos1 = new MateriaConCorrelativas(
 		carrera=informatica,creditos=10,anio=2,correlativas = #{intro},cupo = 20
@@ -29,6 +27,10 @@ describe "inscripciones"{
 	const objetos1Bis = new MateriaConCorrelativas(
 		carrera=informatica,creditos=10,anio=2,correlativas = #{intro},cupo = 1
 	)
+	
+	const redes = new MateriaElitista(carrera=informatica,creditos=10,anio=2,cupo=1)
+	
+	const estrategias = new MateriaPorGradoDeAvance (carrera=informatica,creditos=12,anio=3,cupo=1)
 	
 	
 	
@@ -41,6 +43,14 @@ describe "inscripciones"{
 		andy.registrarAprobada(intro,9)
 		objetos1Bis.inscribir(fabi)
 		objetos1Bis.inscribir(fede)
+		redes.inscribir(fabi)
+		redes.inscribir(fede)
+		redes.inscribir(andy)
+		estrategias.inscribir(fabi)
+		estrategias.inscribir(fede)
+		estrategias.inscribir(dami)
+		
+		
 	}
 
 	test "las notas no se cargan dos veces"{
@@ -75,11 +85,11 @@ describe "inscripciones"{
 	}
 	
 	test "materias a las que esta inscripto fabi"{
-		assert.equals(fabi.materiasInscriptas(),#{objetos1Bis})
+		assert.equals(fabi.materiasInscriptas(),#{objetos1Bis,estrategias,redes})
 	}
 	
 	test "materias en las que fede esta en espera"{
-		assert.equals(fede.materiasEnEspera(),#{objetos1Bis})
+		assert.equals(fede.materiasEnEspera(),#{objetos1Bis,estrategias,redes})
 	}
 	
 	test "fede quiere cursar una aprobada"{
@@ -92,9 +102,18 @@ describe "inscripciones"{
 	
 	test "andy queda en lista de espera para objetos" {
 		objetos1Bis.inscribir(andy)
-		assert.equals(andy.materiasEnEspera(),#{objetos1Bis})
+		assert.equals(andy.materiasEnEspera(),#{redes,objetos1Bis})
 		assert.equals(objetos1Bis.estudiantesEnListaDeEspera(),[fede,andy])
 	}
 	
+	test "se anota en estrategias fede porque es el de mas materias metidas en la lista de espera"{
+		estrategias.darDeBaja(fabi)
+		assert.equals(estrategias.alumnos(),#{fede})
+	}
+	
+	test "se anota en redes fede por mejor promedio"{
+		redes.darDeBaja(fabi)
+		assert.equals(redes.alumnos(),#{fede})
+	}
 	
 }
