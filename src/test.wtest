@@ -1,0 +1,43 @@
+import materia.*
+import estudiante.*
+import universidad.*
+describe "inscripciones"{
+	
+	var fabi = new Estudiante (
+		carreras=#{"informatica"},materiasAprobadas = #{},materiasInscriptas=#{}
+	)
+	var fede = new Estudiante (
+		carreras=#{"informatica"},materiasAprobadas = #{},materiasInscriptas=#{}
+	)
+	
+	const intro = new Materia(
+		carrera="informatica",creditos=8,anio=1,inscriptos=#{}, cupo = 20
+	)
+	
+	const objetos1 = new MateriaConCorrelativas(
+		carrera="informatica",creditos=10,anio=2,inscriptos = #{},correlativas = #{intro},cupo = 1
+	)
+	
+	const objetos1Bis = new MateriaConCorrelativas(
+		carrera="informatica",creditos=10,anio=2,inscriptos = #{},correlativas = #{intro},cupo = 1
+	)
+		
+	test "inscribir al pibe a objetos1, darlo de baja y que quede el de la lista de espera"{
+		fabi.registrarAprobada(intro,7)
+		fabi.inscribirse(objetos1)
+		assert.equals(objetos1.inscriptos(),#{fabi})
+		fede.registrarAprobada(intro,5)
+		fede.inscribirse(objetos1)	
+		objetos1.darDeBaja(fabi)
+		assert.equals(objetos1.inscriptos(),#{fede})
+			
+	}
+	
+	test "inscriptos" { 
+		fabi.registrarAprobada(intro,10)
+		fede.registrarAprobada(intro,5)
+		fabi.inscribirse(objetos1Bis)
+		fede.inscribirse(objetos1Bis)
+		assert.equals(objetos1Bis.inscriptos(),#{fede,fabi})
+	}
+}
