@@ -4,7 +4,7 @@ class Estudiante {
 
 	var materiasAprobadas // conjunto
 	var property materiasInscriptas // conjunto
-	var carreras 
+	var property carreras 
 
 	method puedeCursar(materia) = 
 		self.cumplePrerrequisitos(materia)
@@ -29,7 +29,6 @@ class Estudiante {
 		
 		var matsAux = materias
 		var matsAprAux = materiasAprobadas.map{mat => mat.materia()}.asSet().intersection(matsAux)
-		
 		return matsAprAux == matsAux 
 		
 	}
@@ -38,8 +37,9 @@ class Estudiante {
 	
 	method aproboElAnioAnterior(materia) {
 		var anioMat = materia.anio()
-		var matAprAux = materiasAprobadas.map{mat=>mat.Materia().anio()}.filter{anio => anio == anioMat}
-		return anioMat == matAprAux
+		var matAprAux = materiasAprobadas.map{mat=>mat.Materia()}.filter{mat=>mat.anio()==anioMat.anio()}
+		var matsCarreraAux = materia.carrera().filter{mat=>mat.anio() == anioMat.anio()}
+		return matAprAux == matsCarreraAux
 	}
 	
 	method cursaLaCarrera(carrera) = carreras.contains(carrera)

@@ -16,3 +16,11 @@ class Curso {
 		listaDeEspera.add(alumno)
 	}
 }
+
+class Carrera {
+	const property materias
+	
+	constructor (_materias){
+		materias = _materias
+	}
+}
