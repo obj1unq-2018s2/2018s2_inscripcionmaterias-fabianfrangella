@@ -18,23 +18,25 @@ describe "inscripciones"{
 		carreras=#{informatica},materiasAprobadas = #{},materiasInscriptas=#{}
 	)
 	
-	const intro = new Materia(carrera=informatica,creditos=8,anio=1, cupo = 20)
+	const intro = new Materia(carrera=informatica,creditos=8,anio=1, cupo = 20,criterio = porOrdenDeLlegada)
 	
 	const objetos1 = new MateriaConCorrelativas(
-		carrera=informatica,creditos=10,anio=2,correlativas = #{intro},cupo = 20
+		carrera=informatica,creditos=10,anio=2,correlativas = #{intro},cupo = 20,criterio = porOrdenDeLlegada
 	)
 	
 	const objetos1Bis = new MateriaConCorrelativas(
-		carrera=informatica,creditos=10,anio=2,correlativas = #{intro},cupo = 1
+		carrera=informatica,creditos=10,anio=2,correlativas = #{intro},cupo = 1,criterio = porOrdenDeLlegada
 	)
 	
-	const redes = new MateriaElitista(carrera=informatica,creditos=10,anio=2,cupo=1)
+	const redes = new Materia(carrera=informatica,creditos=10,anio=2,cupo=1,criterio=elitista)
 	
-	const estrategias = new MateriaPorGradoDeAvance (carrera=informatica,creditos=12,anio=3,cupo=1)
+	const estrategias = new Materia (carrera=informatica,creditos=12,anio=3,cupo=1,criterio = porGradoDeAvance)
+	
 	
 	
 	
 	fixture{
+		
 		informatica.asignarMateria(intro)
 		informatica.asignarMateria(objetos1)
 		informatica.asignarMateria(objetos1Bis)

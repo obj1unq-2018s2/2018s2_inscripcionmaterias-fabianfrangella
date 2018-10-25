@@ -8,15 +8,17 @@ class Materia {
 	const creditos // numero
 	const anio // numero
 	const cupo
+	const criterio 
 	var property alumnos = #{}
-	var listaDeEspera = []
+	var property listaDeEspera = []
 
 
-	constructor(_carrera, _creditos, _anio,_cupo) {
+	constructor(_carrera, _creditos, _anio,_cupo,_criterio) {
 		carrera = _carrera
 		creditos = _creditos
 		anio = _anio
 		cupo = _cupo
+		criterio = _criterio
 	}
 
 	method carrera() = carrera
@@ -48,16 +50,21 @@ class Materia {
 	
 	method darDeBaja(estudiante){
 		alumnos.remove(estudiante)
-		self.anotarAlQueCorresponda()
+		criterio.anotarAlQueCorresponda(self)
 	}
-	
-	method anotarAlQueCorresponda() { // las materias normales anotan por orden de llegada
-		self.inscribir(self.primeroDeLaLista())
+	method sacarDeLista(alguien){
+		listaDeEspera.remove(alguien)
+	}
+	method sacarPrimero() { 
 		listaDeEspera = listaDeEspera.drop(1)
 	}
 	method primeroDeLaLista() = listaDeEspera.first()
 	
 	method estudiantesEnListaDeEspera() = listaDeEspera
+	
+	method mejorPromedioEnEspera() =
+		listaDeEspera.max{ alumno => alumno.promedio() }
+	
 }
 
 class MateriaConCorrelativas inherits Materia {
@@ -86,26 +93,6 @@ class MateriaDeAnio inherits Materia {
 
 }
 
-class MateriaElitista inherits Materia {
-
-	override method anotarAlQueCorresponda() {
-		var mejorPromedio = listaDeEspera.max{alumno=>alumno.promedio()}
-		self.inscribir(mejorPromedio)
-		listaDeEspera.remove(mejorPromedio)
-	}
-
-}
-
-class MateriaPorGradoDeAvance inherits Materia {
-
-	override method anotarAlQueCorresponda() {
-		var masAvanzado = listaDeEspera.max{alumno=>alumno.cantidadDeAprobadas()}
-		self.inscribir(masAvanzado)
-		listaDeEspera.remove(masAvanzado)
-		
-	}
-
-}
 class MateriaAprobada {
 
 	const alumno
@@ -121,5 +108,31 @@ class MateriaAprobada {
 	method materia() = materia
 	method anioMateria() = materia.anio()
 	method nota() = nota
+}
+
+
+object porOrdenDeLlegada {
+	 method anotarAlQueCorresponda(materia){
+		materia.inscribir(materia.primeroDeLaLista())
+		materia.sacarPrimero()
+	}
+}
+
+object porGradoDeAvance {
+	 method anotarAlQueCorresponda(materia){
+		var masAvanzado = materia.listaDeEspera().max{alumno=>alumno.cantidadDeAprobadas()}
+		materia.inscribir(masAvanzado)
+		materia.sacarDeLista(masAvanzado)
+	}
+}
+
+object elitista  {
+
+	 method anotarAlQueCorresponda(materia) {
+		var mejorPromedio = materia.mejorPromedioEnEspera()
+		materia.inscribir(mejorPromedio)
+		materia.sacarDeLista(mejorPromedio)
+	}
+
 }
 
