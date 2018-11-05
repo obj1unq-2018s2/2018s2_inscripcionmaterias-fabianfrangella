@@ -6,6 +6,8 @@ describe "inscripciones"{
 	const informatica = new Carrera ()
 	
 	var fabi = new Estudiante (
+		// TODO Aprovecha los valores por defecto en los atributos para no tener que pasar tantos datos al instanciar.
+		// En particular las colecciones vacías siempre se pueden evitar.
 		carreras=#{informatica},materiasAprobadas = #{},materiasInscriptas=#{}
 	)
 	var fede = new Estudiante (
@@ -56,7 +58,7 @@ describe "inscripciones"{
 	}
 
 	test "las notas no se cargan dos veces"{
-		fabi.registrarAprobada(intro,7)
+		fabi.registrarAprobada(intro,7) // TODO Debería tirar excepción
 		assert.that(fabi.materiasAprobadas().size()==1)
 	}
 	test "inscriptos" { 

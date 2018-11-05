@@ -9,6 +9,7 @@ class Estudiante {
 
 	method puedeCursar(materia) = 
 		self.cumplePrerrequisitos(materia)
+		// TODO Subtarea
 		&& !materiasAprobadas.map{mat=>mat.materia()}.contains(materia)
 	
 
@@ -19,13 +20,17 @@ class Estudiante {
 	method agregarEnEspera(materia) {
 		materiasEnEspera.add(materia)
 	}
-	
+
+	// TODO Innecesario	
 	method cumplePrerrequisitos(materia) = materia.prerrequisitos(self)
 	
 	method tieneAprobadas(materias) {
-		
+
+		// TODO Variable innecesaria.		
 		var matsAux = materias
 		var matsAprAux = materiasAprobadas.map{mat => mat.materia()}.asSet().intersection(matsAux)
+		
+		// TODO Esto es una hackeada, usá all
 		return matsAprAux == matsAux 
 		
 	}
@@ -36,6 +41,8 @@ class Estudiante {
 		
 		var anioAux = materia.anio() - 1
 		var carreraAux = materia.carrera()
+		
+		// TODO Usar tieneAprobadas!
 		var aprobadasAnio = materiasAprobadas.filter{mat=>mat.anioMateria()==anioAux}
 		return carreraAux.materiasDeAnio(anioAux) == aprobadasAnio.map{mat=>mat.materia()}.asSet()
 	}
@@ -43,6 +50,7 @@ class Estudiante {
 	method cursaLaCarrera(carrera) = carreras.contains(carrera)
 	
 	method registrarAprobada(materia, nota) {
+		// TODO Esto debería ocurrir dentro del if
 		var aprLocl = new MateriaAprobada(alumno = self, nota = nota, materia = materia)
 		if (!materiasAprobadas.any{ mat => mat.materia() == aprLocl.materia()}) materiasAprobadas.add(aprLocl)
 	}
@@ -52,7 +60,8 @@ class Estudiante {
 	}
 	
 	method cantidadDeAprobadas() = materiasAprobadas.size()
-	
+
+	// TODO No calcula el promedio	
 	method promedio() = materiasAprobadas.sum{ mat => mat.nota() }
 }
 

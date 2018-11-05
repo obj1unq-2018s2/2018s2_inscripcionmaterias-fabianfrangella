@@ -12,7 +12,7 @@ class Materia {
 	var property alumnos = #{}
 	var property listaDeEspera = []
 
-
+	// TODO ¿Para qué el constructor? No lo estás usando.
 	constructor(_carrera, _creditos, _anio,_cupo,_criterio) {
 		carrera = _carrera
 		creditos = _creditos
@@ -33,6 +33,8 @@ class Materia {
 		if (alumno.puedeCursar(self) && self.tieneCupo()) {
 			alumno.inscribirse(self)
 			alumnos.add(alumno)
+			
+			// TODO Podría evitarse validar dos veces lo mismo
 		} else if (alumno.puedeCursar(self) && !self.tieneCupo()) {
 			self.ponerEnEspera(alumno)
 			alumno.agregarEnEspera(self)
@@ -49,7 +51,7 @@ class Materia {
 	}
 	
 	method darDeBaja(estudiante){
-		alumnos.remove(estudiante)
+		alumnos.remove(estudiante) // TODO No estás notificando al alumno!
 		criterio.anotarAlQueCorresponda(self)
 	}
 	method sacarDeLista(alguien){
@@ -62,6 +64,7 @@ class Materia {
 	
 	method estudiantesEnListaDeEspera() = listaDeEspera
 	
+	// Sería mejor que estuviera en el objeto elitista
 	method mejorPromedioEnEspera() =
 		listaDeEspera.max{ alumno => alumno.promedio() }
 	
@@ -69,6 +72,7 @@ class Materia {
 
 class MateriaConCorrelativas inherits Materia {
 
+	// TODO Podría ser const para no tener ese warning
 	var correlativas // lista de materias
 
 	override method prerrequisitos(alumno) {
@@ -130,6 +134,7 @@ object elitista  {
 
 	 method anotarAlQueCorresponda(materia) {
 		var mejorPromedio = materia.mejorPromedioEnEspera()
+		// TODO Acá hay código repetido
 		materia.inscribir(mejorPromedio)
 		materia.sacarDeLista(mejorPromedio)
 	}
